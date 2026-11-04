@@ -42,8 +42,15 @@ if [[ -d "$BIN_SRC" ]]; then
   for binary in "$BIN_SRC"/*; do
     [ -f "$binary" ] || continue
     bin_name="$(basename "$binary")"
+    dest_path="$BIN_DEST/$bin_name"
+
+    if [[ -L "$dest_path" && $(readlink "$dest_path") == "$binary" ]]; then
+      echo "Link for $bin_name is already created"
+      continue
+    fi
+
     chmod +x "$binary"
-    ln -sfn "$binary" "$BIN_DEST/$bin_name"
-    echo "Linked binary $bin_name -> $BIN_DEST/$bin_name"
+    ln -sfn "$binary" "$dest_path"
+    echo "Linked binary $bin_name -> $dest_path"
   done
 fi
