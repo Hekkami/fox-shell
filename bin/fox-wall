@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+FOX_DIR="$XDG_CONFIG_HOME/fox-themes"
+WALLPAPERS_DIR="$FOX_DIR/wallpapers"
+CURRENT_WALL_FILE="$FOX_DIR/current_wallpaper"
+
+get_current_wallpaper() {
+  if [ -f "$CURRENT_WALL_FILE" ]; then
+    cat "$CURRENT_WALL_FILE"
+  else
+    echo "fox-shell-wallpaper.jpg"
+  fi
+}
+
+cmd_set() {
+  local wall_name="${1:-}"
+
+  if [ -z "$wall_name" ]; then
+    echo "Error: You must specify a wallpaper name."
+    echo "Usage: fox-wall set <filename_or_path>"
+    exit 1
+  fi
+
+  local target=""
+  for ext in png jpg jpeg webp; do
+    if [ -f "$WALLPAPERS_DIR/$wall_name.$ext" ]; then
+      target="$WALLPAPERS_DIR/$wall_name.$ext"
+      break
+    elif [ -f "$WALLPAPERS_DIR/$wall_name" ]; then
+      target="$WALLPAPERS_DIR/$wall_name"
+      break
+    fi
+  done
+
+  if [ -z "$target" ]; then
+    echo "Error: Wallpaper '$wall_name' not found in $WALLPAPERS_DIR"
+    exit 1
+  fi
+
+  if command -v awww &>/dev/null; then
+    awww img --transition-type random "$target"
+  elif command -v hyprpaper &>/dev/null; then
+    hyprctl hyprpaper preload "$target"
+    hyprctl hyprpaper wallpaper ",$target"
+  else
+    echo "⚠️ Warning: Neither 'awww' or 'hyprpaper' were detected."
+  fi
+
+  echo "$(basename "$target")" >"$CURRENT_WALL_FILE"
+}
+
+cmd_list() {
+  for img in "$WALLPAPERS_DIR"/*; do
+    [ -f "$img" ] || continue
+    basename "$img"
+  done
+}
+
+case "${1:-}" in
+set)
+  cmd_set "${2:-}"
+  ;;
+get)
+  get_current_wallpaper
+  ;;
+list)
+  cmd_list
+  ;;
+*)
+  echo "Usage: fox-wall {set <filename>|get|list}"
+  exit 1
+  ;;
+esac

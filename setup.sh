@@ -1,9 +1,11 @@
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FOX_CORE="$REPO_ROOT/fox-core"
 BK="$REPO_ROOT/backups/$(date +%Y%m%d-%H%M%S)"
+BIN_SRC="$REPO_ROOT/bin"
+BIN_DEST="$HOME/.local/bin"
 
 declare -A TARGETS=(
-  ["$HOME/.config"]="hypr"
+  ["$HOME/.config"]="hypr fox-themes"
 )
 
 for dest_dir in "${!TARGETS[@]}"; do
@@ -34,3 +36,14 @@ for dest_dir in "${!TARGETS[@]}"; do
     fi
   done
 done
+
+mkdir -p "$BIN_DEST"
+if [[ -d "$BIN_SRC" ]]; then
+  for binary in "$BIN_SRC"/*; do
+    [ -f "$binary" ] || continue
+    bin_name="$(basename "$binary")"
+    chmod +x "$binary"
+    ln -sfn "$binary" "$BIN_DEST/$bin_name"
+    echo "Linked binary $bin_name -> $BIN_DEST/$bin_name"
+  done
+fi

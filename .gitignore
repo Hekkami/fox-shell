@@ -197,3 +197,6 @@ apps/.config/nvim/lazy-lock.json
 
 backups/
 logs/
+generated/
+current
+current_wallpaper
