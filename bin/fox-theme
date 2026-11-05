@@ -65,7 +65,27 @@ reload_services() {
 }
 
 cmd_set() {
-  local theme_name="${1:-}"
+  local theme_name=""
+  local skip_wall=false
+
+  while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+    -sw | --skip_wall)
+      skip_wall=true
+      shift
+      ;;
+    -*)
+      echo "Error: Opción desconocida: $1"
+      return 1
+      ;;
+    *)
+      if [ -z "$theme_name" ]; then
+        theme_name="$1"
+      fi
+      shift
+      ;;
+    esac
+  done
 
   if [ -z "$theme_name" ]; then
     theme_name="$(get_current_theme)"
@@ -80,13 +100,14 @@ cmd_set() {
   echo "🎨 Applying theme: $theme_name..."
   render_templates_awk "$palette" "$TEMPLATES_DIR" "$GENERATED_DIR"
   echo "$theme_name" >"$CURRENT_FILE"
+  if [ "$skip_wall" = false ]; then
+    local wall_name
+    wall_name="$(grep -E '^[[:space:]]*wallpaper[[:space:]]*=' "$palette" | cut -d'=' -f2 | tr -d ' "' || true)"
 
-  local wall_name
-  wall_name="$(grep -E '^[[:space:]]*wallpaper[[:space:]]*=' "$palette" | cut -d'=' -f2 | tr -d ' "' || true)"
-
-  if [ -n "$wall_name" ] && command -v fox-wall &>/dev/null; then
-    echo "🖼️ Sync wallpaper: $wall_name"
-    fox-wall set "$wall_name" || true
+    if [ -n "$wall_name" ] && command -v fox-wall &>/dev/null; then
+      echo "🖼️ Sync wallpaper: $wall_name"
+      fox-wall set "$wall_name" || true
+    fi
   fi
 
   reload_services
