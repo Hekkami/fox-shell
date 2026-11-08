@@ -2,12 +2,13 @@
 set -euo pipefail
 source "$(dirname "$0")/utils.sh"
 
-print_info "Installing essential system packages..."
-retry_command sudo pacman -S --needed --noconfirm \
+print_info "Installing essential system packages (with full system upgrade)..."
+retry_command sudo pacman -Syu --needed --noconfirm \
   git base-devel tlp \
-  chromium \
+  chromium zen-browser firefox \
   hyprland kitty hypridle hyprlock brightnessctl playerctl hyprpolkitagent \
   quickshell \
+  fish starship \
   yazi ffmpeg 7zip jq poppler resvg imagemagick mpv imv \
   xdg-desktop-portal xdg-desktop-portal-hyprland nwg-look gnome-themes-extra \
   qt5-wayland qt6-wayland \
@@ -15,7 +16,7 @@ retry_command sudo pacman -S --needed --noconfirm \
   wl-clipboard grim slurp cliphist libnotify \
   ttf-jetbrains-mono-nerd \
   xdg-user-dirs udisks2 udiskie xdg-utils \
-  bluez bluez-utils networkmanager
+  bluez networkmanager
 
 print_success "Base packages installed."
 
@@ -51,5 +52,4 @@ for pkg in pipewire wireplumber pipewire-pulse pipewire-alsa; do
     print_info "$pkg is already installed, skipping."
   fi
 done
-print_success "Audio stack configured."
 print_success "Audio stack configured."
