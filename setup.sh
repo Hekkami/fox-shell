@@ -1,11 +1,9 @@
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-FOX_CORE="$REPO_ROOT/fox-core"
-BK="$REPO_ROOT/backups/$(date +%Y%m%d-%H%M%S)"
-BIN_SRC="$REPO_ROOT/bin"
-BIN_DEST="$HOME/.local/bin"
+#!/usr/bin/env bash
+set -euo pipefail
+source "$(dirname "$0")/install/utils.sh"
 
 declare -A TARGETS=(
-  ["$HOME/.config"]="hypr fox-themes"
+  ["$HOME/.config"]="hypr fox-themes quickshell"
 )
 
 for dest_dir in "${!TARGETS[@]}"; do
@@ -15,7 +13,7 @@ for dest_dir in "${!TARGETS[@]}"; do
 
     if [[ -d "$src" ]]; then
       if [[ -L "$dest" && $(readlink "$dest") == "$src" ]]; then
-        echo "$mod link is alreary created"
+        echo "$mod link is already created"
         continue
       fi
 

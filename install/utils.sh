@@ -1,4 +1,8 @@
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+FOX_CORE="$REPO_ROOT/fox-core"
+BK="$REPO_ROOT/backups/$(date +%Y%m%d-%H%M%S)"
+BIN_SRC="$REPO_ROOT/bin"
+BIN_DEST="$HOME/.local/bin"
 
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
