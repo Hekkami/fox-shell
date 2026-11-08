@@ -15,7 +15,12 @@ else
 
   if retry_command bash -c 'rm -rf /tmp/paru && git clone https://aur.archlinux.org/paru.git /tmp/paru'; then
     trap 'rm -rf /tmp/paru' EXIT
-    (cd /tmp/paru && retry_command makepkg -si --noconfirm)
+    if (cd /tmp/paru && makepkg -si --noconfirm); then
+      print_success "Paru installed successfully from AUR."
+    else
+      print_error "Failed to compile or install Paru via makepkg."
+      exit 1
+    fi
     print_success "Paru installed successfully."
   else
     print_error "Failed to clone paru repository."
