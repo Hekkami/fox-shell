@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 FOX_CORE="$REPO_ROOT/fox-core"
 BK="$REPO_ROOT/backups/$(date +%Y%m%d-%H%M%S)"
@@ -21,14 +24,14 @@ refresh_mirrors_once() {
   MIRRORS_REFRESHED_ONCE=1
 
   if command -v cachyos-rate-mirrors &>/dev/null; then
-    print_warning "Re-ranking CachyOS mirrors before retrying (this can take a minute)..."
+    print_warning "Re-ranking CachyOS mirrors before retrying..."
     sudo cachyos-rate-mirrors &>/dev/null || true
   elif command -v reflector &>/dev/null; then
-    print_warning "Re-ranking Arch mirrors before retrying (this can take a minute)..."
+    print_warning "Re-ranking Arch mirrors before retrying..."
     sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist &>/dev/null || true
   fi
 
-  print_warning "Forcing a full database re-sync (pacman -Syy) in case the local index is pointing at a version the mirrors no longer have..."
+  print_warning "Forcing full database re-sync (pacman -Syy)..."
   sudo pacman -Syy &>/dev/null || true
 }
 
@@ -75,22 +78,13 @@ prompt_app_yn() {
 
 app_already_installed() {
   local app="$1"
-  local fallback_func="${2:-}"
 
   if pacman -Qq "$app" &>/dev/null; then
     if pacman_app_healthy "$app"; then
       return 0
     fi
-    print_warning "$app is installed but some of its files are missing or corrupted; will reinstall."
+    print_warning "$app is installed but some files are missing or corrupted; will reinstall."
     return 1
-  fi
-
-  if [ -n "$fallback_func" ]; then
-    local flatpak_id
-    flatpak_id=$($fallback_func "$app")
-    if [ -n "$flatpak_id" ] && flatpak info "$flatpak_id" &>/dev/null; then
-      return 0
-    fi
   fi
 
   return 1
@@ -98,13 +92,12 @@ app_already_installed() {
 
 install_pacman_apps() {
   local -n apps_ref=$1
-  local fallback_func="${2:-}"
 
   for item in "${apps_ref[@]}"; do
     local app="${item%%:*}"
     local desc="${item#*:}"
 
-    if app_already_installed "$app" "$fallback_func"; then
+    if app_already_installed "$app"; then
       print_success "$app is already installed, skipping."
       continue
     fi
@@ -144,13 +137,12 @@ install_pacman_apps() {
 
 install_aur_apps() {
   local -n apps_ref=$1
-  local fallback_func=$2
 
   for item in "${apps_ref[@]}"; do
     local app="${item%%:*}"
     local desc="${item#*:}"
 
-    if app_already_installed "$app" "$fallback_func"; then
+    if app_already_installed "$app"; then
       print_success "$app is already installed, skipping."
       continue
     fi
@@ -160,15 +152,17 @@ install_aur_apps() {
       continue
     fi
 
-    print_info "Installing $app (review PKGBUILD if prompted)..."
+    print_info "Installing $app..."
     local -a paru_cmd=(paru -S --needed "$app")
     if pacman -Qq "$app" &>/dev/null; then
       paru_cmd=(paru -S "$app")
     fi
 
-    if "${paru_cmd[@]}"; then
+    if retry_command "${paru_cmd[@]}"; then
       print_success "$app installed via AUR."
       continue
+    else
+      print_warning "AUR installation for $app failed."
     fi
   done
 }
