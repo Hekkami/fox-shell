@@ -9,6 +9,7 @@ retry_command sudo pacman -Syu --needed --noconfirm \
   hyprland kitty hypridle hyprlock brightnessctl playerctl hyprpolkitagent \
   quickshell \
   fish starship \
+  awww \
   yazi ffmpeg 7zip jq poppler resvg imagemagick mpv imv \
   xdg-desktop-portal xdg-desktop-portal-hyprland nwg-look gnome-themes-extra \
   qt5-wayland qt6-wayland \
