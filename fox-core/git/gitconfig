@@ -1,0 +1,7 @@
+[include]
+	path = ~/.git-user
+
+[init]
+	defaultBranch = main
+[core]
+	symlinks = true
