@@ -9,5 +9,5 @@
 --
 hl.on("hyprland.start", function()
 	hl.exec_cmd("awww-daemon & fox-theme set --skip-wall")
-	hl.exec_cmd("quickshell")
+	hl.exec_cmd("env QML_IMPORT_PATH=$HOME/.config/quickshell quickshell")
 end)
