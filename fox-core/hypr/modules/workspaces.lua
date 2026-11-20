@@ -47,3 +47,14 @@ hl.window_rule({
 	move = "20 monitor_h-120",
 	float = true,
 })
+
+hl.workspace_rule({ workspace = "1", monitor = "", persistent = true })
+hl.workspace_rule({ workspace = "2", monitor = "", persistent = true })
+hl.workspace_rule({ workspace = "3", monitor = "", persistent = true })
+hl.workspace_rule({ workspace = "4", monitor = "", persistent = true })
+hl.workspace_rule({ workspace = "5", monitor = "", persistent = true })
+hl.workspace_rule({ workspace = "6", monitor = "", persistent = true })
+hl.workspace_rule({ workspace = "7", monitor = "", persistent = true })
+hl.workspace_rule({ workspace = "8", monitor = "", persistent = true })
+hl.workspace_rule({ workspace = "9", monitor = "", persistent = true })
+hl.workspace_rule({ workspace = "10", monitor = "", persistent = true })
