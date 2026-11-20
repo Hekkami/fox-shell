@@ -2,9 +2,17 @@ name = "Fox Theme"
 wallpaper = "01-ancient.jpg"
 mode = "dark"
 
-accent    = "#f05653"
-selection = "#243342"
-muted     = "#394d63"
+primary     = "#f05653"
+primary_fg   = "#130808"
+secondary   = "#3f191b"
+secondary_fg = "#f8ded9"
+
+accent    = "#ff8c42"
+accent_fg  = "#f5fafd"
+muted     = "#2f1c1d"
+muted_fg   = "#b09893"
+
+selection = "#3a1c1d"
 
 darker_background  = "#140808"
 dark_background    = "#210e0e"
