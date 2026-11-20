@@ -6,7 +6,7 @@ print_info "Installing essential system packages (with full system upgrade)..."
 retry_command sudo pacman -Syu --needed --noconfirm \
   git base-devel tlp \
   chromium zen-browser firefox \
-  hyprland kitty hypridle hyprlock brightnessctl playerctl hyprpolkitagent \
+  hyprland kitty hypridle brightnessctl playerctl hyprpolkitagent \
   quickshell \
   fish starship \
   awww \
