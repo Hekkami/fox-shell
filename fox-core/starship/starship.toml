@@ -1,0 +1,143 @@
+add_newline = false
+command_timeout = 3600000
+palette = "fox"
+
+format = """
+$hostname$directory$git_branch$git_status$git_state$fill$nodejs$bun$rust$golang$c$zig$python$docker_context$cmd_duration$time
+$character"""
+
+[fill]
+symbol = ' '
+
+[character]
+success_symbol = "[⛩️ ](bold bright_green)"
+error_symbol = "[⛩️ ](bold red)"
+
+[package]
+disabled = true
+
+[git_branch]
+style = "bg:magenta"
+symbol = "󰘬"
+truncation_length = 12
+truncation_symbol = ""
+format = " 󰜥 [](bold fg:bg_light)[$symbol $branch(:$remote_branch)](fg:fg bg:bg_light)[ ](bold fg:bg_light)"
+
+[git_commit]
+commit_hash_length = 4
+tag_symbol = " "
+
+[git_state]
+format = '[\[$state( $progress_current/$progress_total)\]]($style) '
+cherry_pick = "[󰃸 PICKING](bold red)"
+rebase = "[󰑖 REBASING](bold yellow)"
+merge = "[󰘬 MERGING](bold magenta)"
+revert = "[󰕍 REVERTING](bold red)"
+
+[git_status]
+conflicted = " [󰀨 $count](bold red)"
+ahead = " [󰓅 $count](bold green)"
+behind = " [󰓆 $count](bold yellow)"
+diverged = " [󰘬 $count](bold magenta)"
+untracked = " [󰋗 $count](bold cyan)"
+stashed = " [󰆓 $count](bold primary)"
+modified = " [󰏫 $count](bold yellow)"
+staged = " [󰐕 $count](bold green)"
+renamed = " [󰑕 $count](bold cyan)"
+deleted = " [󰆴 $count](bold red)"
+
+[hostname]
+ssh_only = true
+format = "[](bold fg:magenta)[•$hostname](bg:magenta bold fg:primary_fg)[](bold fg:magenta)"
+trim_at = ".companyname.com"
+disabled = false
+
+[line_break]
+disabled = false
+
+[memory_usage]
+disabled = true
+threshold = -1
+symbol = " "
+style = "bold dimmed green"
+
+[time]
+disabled = false
+time_format = "%R"
+format = ' [](bold fg:primary)[$time](bold bg:primary fg:primary_fg)[](bold fg:primary)'
+
+[username]
+style_user = "bold bg:magenta fg:primary_fg"
+style_root = "red bold"
+format = "[](bold fg:magenta)[$user]($style)"
+disabled = false
+show_always = true
+
+[directory]
+home_symbol = " "
+read_only = "  "
+style = "bg:cyan fg:primary_fg"
+truncation_length = 2
+truncation_symbol = "…/"
+truncate_to_repo = true
+format = '[](bold fg:cyan)[󰉋 → $path]($style)[](bold fg:cyan)'
+
+[directory.substitutions]
+"Desktop" = "  "
+"Documents" = "  "
+"Downloads" = "  "
+"Music" = " 󰎈 "
+"Pictures" = "  "
+"Videos" = "  "
+
+[cmd_duration]
+min_time = 500
+format = " [](bold fg:bg_light)[🦊 $duration](bold bg:bg_light fg:fg)[](bold fg:bg_light)"
+
+[nodejs]
+disabled = false
+symbol = " "
+format = ' [$symbol($version)](bold green)'
+version_format = "v${raw}"
+
+[bun]
+disabled = false
+symbol = "󰏗 "
+format = ' [$symbol($version)](bold yellow)'
+version_format = "v${raw}"
+
+[rust]
+disabled = false
+symbol = " "
+format = ' [$symbol($version)](bold red)'
+version_format = "v${raw}"
+
+[golang]
+disabled = false
+symbol = " "
+format = ' [$symbol($version)](bold cyan)'
+version_format = "v${raw}"
+
+[c]
+disabled = false
+symbol = " "
+format = ' [$symbol($version)](bold primary)'
+version_format = "v${raw}"
+
+[zig]
+disabled = false
+symbol = " "
+format = ' [$symbol($version)](bold yellow)'
+version_format = "v${raw}"
+
+[python]
+disabled = false
+symbol = " "
+format = ' [$symbol($version)( \($virtualenv\))](bold yellow)'
+version_format = "v${raw}"
+
+[docker_context]
+disabled = false
+symbol = "󰡨 "
+format = ' [$symbol($context)](bold cyan)'
+only_with_files = true

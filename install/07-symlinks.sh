@@ -5,7 +5,7 @@ source "$(dirname "$0")/utils.sh"
 print_info "Creating symlinks for dotfiles..."
 
 declare -A TARGETS=(
-  ["$HOME/.config"]="hypr fox-themes kitty fish"
+  ["$HOME/.config"]="hypr fox-themes kitty fish starship"
   ["$HOME"]="git"
 )
 

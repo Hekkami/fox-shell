@@ -13,6 +13,8 @@ end
 
 fish_vi_key_bindings
 
+set -gx STARSHIP_CONFIG "$HOME/.cache/starship/config.toml"
+starship init fish | source
 zoxide init fish | source
 
 function y
